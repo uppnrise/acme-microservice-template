@@ -1,5 +1,29 @@
 #!/usr/bin/env bash
 
+spring init \
+--boot-version=2.3.2.RELEASE \
+--build=gradle \
+--java-version=1.8 \
+--packaging=jar \
+--name=api \
+--package-name=com.upp.microservices.api \
+--groupId=com.upp.microservices.api \
+--dependencies=webflux \
+--version=1.0.0-SNAPSHOT \
+api
+
+spring init \
+--boot-version=2.3.2.RELEASE \
+--build=gradle \
+--java-version=1.8 \
+--packaging=jar \
+--name=util \
+--package-name=com.upp.microservices.util \
+--groupId=com.upp.microservices.util \
+--dependencies=webflux \
+--version=1.0.0-SNAPSHOT \
+util
+
 mkdir microservices
 cd microservices
 
