@@ -7,6 +7,8 @@ import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import static java.lang.String.format;
+
 @Data
 @NoArgsConstructor
 @Document(collection = "recommendations")
@@ -31,5 +33,10 @@ public class RecommendationEntity {
         this.author = author;
         this.rating = rating;
         this.content = content;
+    }
+
+    @Override
+    public String toString() {
+        return format("RecommendationEntity: %s/%d", productId, recommendationId);
     }
 }

@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static java.lang.String.format;
+
 @Data
 @NoArgsConstructor
 @Entity
@@ -30,5 +32,10 @@ public class ReviewEntity {
         this.author = author;
         this.subject = subject;
         this.content = content;
+    }
+
+    @Override
+    public String toString() {
+        return format("ReviewEntity: %s/%d", productId, reviewId);
     }
 }
