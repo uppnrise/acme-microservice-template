@@ -44,10 +44,10 @@ jobs:
       - run: gradle test
       
       - codecov/upload:
-          file: {{ microservices/product-composite-service/build/jacoco/test.exec }}
+          file: microservices/product-composite-service/build/jacoco/test.exec
       - codecov/upload:
-          file: {{ microservices/product-service/build/jacoco/test.exec }}
+          file: microservices/product-service/build/jacoco/test.exec
       - codecov/upload:
-          file: {{ microservices/recommendation-service/build/jacoco/test.exec }}
+          file: microservices/recommendation-service/build/jacoco/test.exec
       - codecov/upload:
-          file: {{ microservices/review-service/build/jacoco/test.exec }}
+          file: microservices/review-service/build/jacoco/test.exec
