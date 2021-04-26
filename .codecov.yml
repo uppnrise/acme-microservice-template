@@ -1,2 +1,7 @@
 codecov:
   require_ci_to_pass: no
+fixes:
+  - "./microservices/product-composite-service/::"
+  - "./microservices/product-service/::"
+  - "./microservices/recommendation-service/::"
+  - "./microservices/review-service/::"
