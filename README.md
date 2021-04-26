@@ -1,5 +1,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![CircleCI](https://img.shields.io/circleci/build/github/uppnrise/acme-microservice-template?token=4335d02d7ba72d490a8a10b2d9c455cab6316b61)](https://app.circleci.com/pipelines/github/uppnrise/acme-microservice-template)
+[![codecov](https://codecov.io/gh/uppnrise/acme-microservice-template/branch/master/graph/badge.svg?token=TBR1L2U0FK)](https://codecov.io/gh/uppnrise/acme-microservice-template)
 # acme-microservices-template
 
 ---
