@@ -32,10 +32,10 @@ jobs:
       - run: gradle test
       
       - codecov/upload:
-          file: microservices/product-composite-service/build/jacoco/test.exec
+          file: microservices/product-composite-service/build/reports/jacoco/test/jacocoTestReport.xml
       - codecov/upload:
-          file: microservices/product-service/build/jacoco/test.exec
+          file: microservices/product-service/build/reports/jacoco/test/jacocoTestReport.xml
       - codecov/upload:
-          file: microservices/recommendation-service/build/jacoco/test.exec
+          file: microservices/recommendation-service/build/reports/jacoco/test/jacocoTestReport.xml
       - codecov/upload:
-          file: microservices/review-service/build/jacoco/test.exec
+          file: microservices/review-service/build/reports/jacoco/test/jacocoTestReport.xml
