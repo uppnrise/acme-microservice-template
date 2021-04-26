@@ -3,6 +3,8 @@
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
 version: 2
+orbs:
+  codecov: codecov/codecov@1.0.2
 jobs:
   build:
     docker:
@@ -41,6 +43,11 @@ jobs:
       # run tests!
       - run: gradle test
       
-      - run:
-          name: Send to CodeCov
-          command: bash <(curl -s https://codecov.io/bash)
+      - codecov/upload:
+          file: {{ microservices/product-composite-service/build/jacoco/test.exec }}
+      - codecov/upload:
+          file: {{ microservices/product-service/build/jacoco/test.exec }}
+      - codecov/upload:
+          file: {{ microservices/recommendation-service/build/jacoco/test.exec }}
+      - codecov/upload:
+          file: {{ microservices/review-service/build/jacoco/test.exec }}
