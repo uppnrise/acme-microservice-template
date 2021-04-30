@@ -37,7 +37,13 @@ It manages product recommendations and stores the following information about ea
 - Content
 
 ## Common Modules
-[WIP]
+Library modules which have been used by different microservices.
+
+### api
+- It holds business models and service interfaces of microservices.
+
+### util
+- It holds exception models/handlers and service utility methods.
 
 ## Tool Installation
 
