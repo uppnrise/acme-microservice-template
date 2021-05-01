@@ -8,8 +8,14 @@ This project is a skeleton code for microservice architecture pattern using Spri
 
 ## Services
 
+### eureka-server
+- A discovery service which tracks existing microservices and their instances.
+
+### gateway
+- An edge server(api gateway) which hides private services from external usage and protect public services when they're used by external clients. 
+
 ### product-composite-service
-It calls three core microservices to create an aggregated information.
+- It calls three core microservices to create an aggregated information.
 
 ### product-service
 It manages product information and describes each product with the following model:
