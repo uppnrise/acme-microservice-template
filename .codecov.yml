@@ -6,3 +6,4 @@ fixes:
   - "./microservices/product-service/"
   - "./microservices/recommendation-service/"
   - "./microservices/review-service/"
+  - "./spring-cloud/eureka-server/"
