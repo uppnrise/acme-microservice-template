@@ -7,3 +7,4 @@ fixes:
   - "./microservices/recommendation-service/"
   - "./microservices/review-service/"
   - "./spring-cloud/eureka-server/"
+  - "./spring-cloud/gateway/"
