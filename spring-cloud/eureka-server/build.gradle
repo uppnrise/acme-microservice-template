@@ -1,12 +1,12 @@
 plugins {
     id 'org.springframework.boot' version '2.3.2.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'java'
-    id 'jacoco'
 }
 
+apply plugin: 'io.spring.dependency-management'
+
 group = 'com.upp.springcloud'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 repositories {
@@ -14,11 +14,12 @@ repositories {
 }
 
 ext {
-    set('springCloudVersion', "Hoxton.SR6")
+    set('springCloudVersion', 'Hoxton.SR6')
 }
 
 dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.glassfish.jaxb:jaxb-runtime'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
@@ -26,21 +27,5 @@ dependencies {
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-    }
-}
-
-test {
-    finalizedBy jacocoTestReport // report is always generated after tests run
-}
-
-jacocoTestReport {
-    dependsOn test // tests are required to run before generating the report
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled true
-        csv.enabled false
-        html.destination layout.buildDirectory.dir('jacocoHtml').get().asFile
     }
 }

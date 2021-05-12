@@ -1,13 +1,5 @@
 package com.upp.microservices.composite.product;
 
-import com.upp.api.composite.product.ProductAggregate;
-import com.upp.api.composite.product.RecommendationSummary;
-import com.upp.api.composite.product.ReviewSummary;
-import com.upp.api.core.product.Product;
-import com.upp.api.core.recommendation.Recommendation;
-import com.upp.api.core.review.Review;
-import com.upp.api.event.Event;
-import com.upp.microservices.composite.product.services.ProductCompositeIntegration;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,12 +11,17 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import com.upp.api.composite.product.ProductAggregate;
+import com.upp.api.composite.product.RecommendationSummary;
+import com.upp.api.composite.product.ReviewSummary;
+import com.upp.api.core.product.Product;
+import com.upp.api.core.recommendation.Recommendation;
+import com.upp.api.core.review.Review;
+import com.upp.api.event.Event;
+import com.upp.microservices.composite.product.services.ProductCompositeIntegration;
 
 import java.util.concurrent.BlockingQueue;
 
-import static com.upp.api.event.Event.Type.CREATE;
-import static com.upp.api.event.Event.Type.DELETE;
-import static com.upp.microservices.composite.product.IsSameEvent.sameEventExceptCreatedAt;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
@@ -33,14 +30,16 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 import static org.springframework.cloud.stream.test.matcher.MessageQueueMatcher.receivesPayloadThat;
 import static org.springframework.http.HttpStatus.OK;
 import static reactor.core.publisher.Mono.just;
+import static com.upp.api.event.Event.Type.CREATE;
+import static com.upp.api.event.Event.Type.DELETE;
+import static com.upp.microservices.composite.product.IsSameEvent.sameEventExceptCreatedAt;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment=RANDOM_PORT, properties = {"eureka.client.enabled=false"})
+@SpringBootTest(
+        webEnvironment=RANDOM_PORT,
+        classes = {ProductCompositeServiceApplication.class, TestSecurityConfig.class },
+        properties = {"spring.main.allow-bean-definition-overriding=true","eureka.client.enabled=false"})
 public class MessagingTests {
-
-    private static final int PRODUCT_ID_OK = 1;
-    private static final int PRODUCT_ID_NOT_FOUND = 2;
-    private static final int PRODUCT_ID_INVALID = 3;
 
     @Autowired
     private WebTestClient client;
@@ -111,7 +110,6 @@ public class MessagingTests {
 
     @Test
     public void deleteCompositeProduct() {
-
         deleteAndVerifyProduct(1, OK);
 
         // Assert one delete product event queued up

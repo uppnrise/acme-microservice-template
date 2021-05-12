@@ -112,12 +112,18 @@ services:
       - "8761:8761"
 
   gateway:
-    entrypoint:
+    environment:
       - SPRING_PROFILES_ACTIVE=docker
     build: spring-cloud/gateway
     mem_limit: 350m
     ports:
       - "8080:8080"
+
+  auth-server:
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    build: spring-cloud/authorization-server
+    mem_limit: 350m
 
   # $ mongo
   mongodb:
