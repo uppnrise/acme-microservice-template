@@ -8,3 +8,4 @@ fixes:
   - "./microservices/review-service/"
   - "./spring-cloud/eureka-server/"
   - "./spring-cloud/gateway/"
+  - "./spring-cloud/authorization-server/"

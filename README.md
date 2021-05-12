@@ -14,6 +14,9 @@ This project is a skeleton code for microservice architecture pattern using Spri
 ### gateway
 - An edge server(api gateway) which hides private services from external usage and protect public services when they're used by external clients. 
 
+### authorization server
+- An oauth 2.0 based legacy auth server which provides development aimed resource security.
+
 ### product-composite-service
 - It calls three core microservices to create an aggregated information.
 
@@ -87,4 +90,40 @@ Library modules which have been used by different microservices.
 
 #### 8. What does it mean when we specify that an operation is idempotent, and why is that useful?
 * It means that the operation will return the same result if called several times with the same input parameters. The state of an underlying database, if any, will also remain the same if the operation is called one or several times with the same input parameters.
+
+#### 9. What is the purpose of Netflix Eureka?
+* As a discovery service.
+
+#### 10. What are the main features of Spring Cloud Gateway?
+* Acting as an edge server, it can hide private APIs and secure public APIs from external usage. It also provides a single entry point to the public APIs in a system landscape of microservices.
+
+#### 11. What backends are supported by Spring Cloud Config?
+* Spring Cloud Config comes with built-in support for the following:
+  * Git repositories 
+  * Local filesystem 
+  * HashiCorp Vault 
+  * JDBC databases
+    
+#### 12. What are the capabilities that Resilience4j provides?
+* The main capabilities are as follows:
+  * Circuit breaker 
+  * Rate limiter 
+  * Bulkhead 
+  * Retries Timeout
+    
+#### 13. What are the trace tree and span concepts used for in distributed tracing, and what is the paper called that defined them?
+* The paper is named Dapper, a Large-Scale Distributed Systems Tracing Infrastructure; see https:/​/​ai.​google/​research/​pubs/​pub36356. In Dapper, the tracing information from a complete workflow is called a trace tree, and subparts of the tree, such as the basic units of work, are called spans. Spans can, in turn, consist of sub-spans, which form the trace tree. A correlation ID is called TraceId, and a span is identified by its own unique SpanId, along with the TraceId of the trace tree it belongs to.
+
+#### 14. What is the purpose of OAuth 2.0 authorization codes?
+* Authorization codes are used in an authorization code grant flow as a one-time password to increase security when compared to an implicit grant flow. When using an authorization code grant flow, it is only in respect of code that is visible in the web browser; as soon as it is used by the backend code in exchange for an access token, it is invalidated. So even if it is stolen in the web browser, it is of little use to an attacker. The attacker also needs access to the client secret to be able to use it.
+
+#### 15. What is the purpose of OAuth 2.0 scopes?
+* They can be used as time-constrained access rights.
+
+#### 16. What does it mean when a token is a JWT token?
+* JWT tokens, a.k.a a JSON Web Tokens, are an open standard (https:/​/
+  tools.​ietf.​org/​html/​rfc7519) for sending information in a token.
+  
+#### 17. What does OpenID Connect add to OAuth 2.0?
+* OpenID Connect enables client applications to verify the identity of users.
 
