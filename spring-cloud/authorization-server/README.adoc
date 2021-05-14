@@ -37,3 +37,23 @@ You can also so the same with the `writer` client:
 ```bash
 curl writer:secret@localhost:8081/oauth/token -d grant_type=password -d username=subject -d password=password
 ```
+
+== 2. Replace Auth-Server with Auth0 OpenID Connect Provider
+
+If you want to replace the auth-server with a certified OpenID connect provider, you can follow below steps. I will use Auth0(https://auth0.com) but for a list of certified implementations please refer to (https://openid.net/developers/certified/).
+
+`1 - Signup to Auth0 website and from the applications tab on your dashboard, copy your Client ID and Client Secret.`
+
+`2 - As application type select "machine to machine" and as authentication method select "POST"`
+
+`3 - Enter http://my.redirect.uri as allowed callback url. On the advanced settings, go to Grant Types and deselect "client credentials" and select "password" box. Save changes.`
+
+`4 - Click to APIs tab and create a new api. Name it as product-composite, give it the identifier https://localhost:8443/product-composite. Click to permissions and create product:read and product:write scopes.`
+
+`5 - On Users tab create a new user with an email and password that you desire.`
+
+`6 - From Settings, click to General tab and make sure Default Directory value is Username-Password-Authentication`.
+
+`7 - Now, for the product-composite and gateway modules, we need to change "spring.security.oauth2.resourceserver.jwt.jwk-set-uri" to "spring.security.oauth2.resourceserver.jwt.issuer-uri: https://${TENANT_DOMAIN_NAME}/" on their resources/application.yml files.`
+
+`8 - If you are a curious one check "curl https://${TENANT_DOMAIN_NAME}/.well-known/openid-configuration -s | jq" to see the discovery document.`
