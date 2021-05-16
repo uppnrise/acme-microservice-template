@@ -1,0 +1,13 @@
+api:
+  common:
+    version: 1.0.0
+    title: product-composite-service
+    description: --------
+    termsOfServiceUrl: --------
+    license: MIT License
+    licenseUrl: https://opensource.org/licenses/MIT
+
+    contact:
+      name: Burhanettin Nacar
+      url: https://github.com/uppnrise
+      email: mtbnacar@gmail.com
