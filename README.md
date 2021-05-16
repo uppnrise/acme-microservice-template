@@ -121,8 +121,7 @@ Library modules which have been used by different microservices.
 * They can be used as time-constrained access rights.
 
 #### 16. What does it mean when a token is a JWT token?
-* JWT tokens, a.k.a a JSON Web Tokens, are an open standard (https:/​/
-  tools.​ietf.​org/​html/​rfc7519) for sending information in a token.
+* JWT tokens, a.k.a a JSON Web Tokens, are an open standard (https://tools.ietf.org/html/rfc7519) for sending information in a token.
   
 #### 17. What does OpenID Connect add to OAuth 2.0?
 * OpenID Connect enables client applications to verify the identity of users.
