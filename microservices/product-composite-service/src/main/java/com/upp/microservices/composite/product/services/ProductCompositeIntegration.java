@@ -11,9 +11,12 @@ import com.upp.api.event.Event;
 import com.upp.util.exceptions.InvalidInputException;
 import com.upp.util.exceptions.NotFoundException;
 import com.upp.util.http.HttpErrorInfo;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.Output;
 import org.springframework.messaging.MessageChannel;
@@ -21,10 +24,13 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
+import java.net.URI;
+import java.time.Duration;
 
 import static com.upp.api.event.Event.Type.CREATE;
 import static com.upp.api.event.Event.Type.DELETE;
@@ -44,7 +50,9 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     private final WebClient.Builder webClientBuilder;
 
     private WebClient webClient;
-    private MessageSources messageSources;
+    private final MessageSources messageSources;
+
+    private final int productServiceTimeoutSec;
 
     public interface MessageSources {
         String OUTPUT_PRODUCTS = "output-products";
@@ -65,15 +73,20 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     public ProductCompositeIntegration(
             WebClient.Builder webClientBuilder,
             ObjectMapper mapper,
-            MessageSources messageSources
+            MessageSources messageSources,
+            @Value("${app.product-service.timeoutSec}") int productServiceTimeoutSec
     ) {
         this.webClientBuilder = webClientBuilder;
         this.mapper = mapper;
         this.messageSources = messageSources;
+        this.productServiceTimeoutSec = productServiceTimeoutSec;
     }
 
-    public Mono<Product> getProduct(int productId) {
-        String url = productServiceUrl + "/product/" + productId;
+    @Retry(name = "product")
+    @CircuitBreaker(name = "product")
+    @Override
+    public Mono<Product> getProduct(int productId, int delay, int faultPercent) {
+        URI url = UriComponentsBuilder.fromUriString(productServiceUrl + "/product/{productId}?delay={delay}&faultPercent={faultPercent}").build(productId, delay, faultPercent);
         LOG.debug("Calling the getProduct API on URL: {}", url);
 
         return getWebClient().get()
@@ -81,7 +94,8 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
                 .retrieve()
                 .bodyToMono(Product.class)
                 .log()
-                .onErrorMap(WebClientResponseException.class, ex -> handleException(ex));
+                .onErrorMap(WebClientResponseException.class, ex -> handleException(ex))
+                .timeout(Duration.ofSeconds(productServiceTimeoutSec));
     }
 
     @Override
@@ -97,7 +111,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
 
     @Override
     public Flux<Recommendation> getRecommendations(int productId) {
-        String url = recommendationServiceUrl + "/recommendation?productId=" + productId;
+        URI url = UriComponentsBuilder.fromUriString(recommendationServiceUrl + "/recommendation?productId={productId}").build(productId);
         LOG.debug("Calling the getRecommendations API on URL: {}", url);
 
         // Return an empty result if something goes wrong to make it possible for the composite service to return partial responses
@@ -122,8 +136,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
 
     @Override
     public Flux<Review> getReviews(int productId) {
-        String url = reviewServiceUrl + "/review?productId=" + productId;
-
+        URI url = UriComponentsBuilder.fromUriString(reviewServiceUrl + "/review?productId={productId}").build(productId);
         LOG.debug("Calling the getReviews API on URL: {}", url);
 
         // Return an empty result if something goes wrong to make it possible for the composite service to return partial responses

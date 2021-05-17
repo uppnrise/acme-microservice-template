@@ -11,3 +11,5 @@ api:
       name: Burhanettin Nacar
       url: https://github.com/uppnrise
       email: mtbnacar@gmail.com
+
+app.product-service.timeoutSec: 2
