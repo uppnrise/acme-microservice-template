@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# ./grdelw clean build
+# ./gradlew clean build
 # docker-compose build
 # docker-compose up -d
 #

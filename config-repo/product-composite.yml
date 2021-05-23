@@ -87,10 +87,10 @@ resilience4j.circuitbreaker:
       failureRateThreshold: 50
       waitDurationInOpenState: 10000
       ringBufferSizeInHalfOpenState: 3
-        automaticTransitionFromOpenToHalfOpenEnabled: true
-        ignoreExceptions:
-          - com.upp.util.exceptions.InvalidInputException
-          - com.upp.util.exceptions.NotFoundException
+      automaticTransitionFromOpenToHalfOpenEnabled: true
+      ignoreExceptions:
+        - com.upp.util.exceptions.InvalidInputException
+        - com.upp.util.exceptions.NotFoundException
 
 logging:
   level:
