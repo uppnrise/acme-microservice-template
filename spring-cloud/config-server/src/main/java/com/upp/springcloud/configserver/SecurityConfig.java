@@ -12,10 +12,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 // Disable CSRF to allow POST to /encrypt and /decrypt endpoints
                 .csrf()
-                .disable()
+                    .disable()
                 .authorizeRequests()
-                .anyRequest().authenticated()
-                .and()
-                .httpBasic();
+                    .antMatchers("/actuator/**").permitAll()
+                    .anyRequest().authenticated()
+                    .and()
+                    .httpBasic();
     }
 }

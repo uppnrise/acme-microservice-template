@@ -1,6 +1,0 @@
-app:
-  eureka-username: u
-  eureka-password: p
-
-eureka.client.register-with-eureka: false
-eureka.client.fetch-registry: false

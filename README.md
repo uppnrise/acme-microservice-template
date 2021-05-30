@@ -8,7 +8,7 @@ This project is a template for microservices architecture pattern using Spring, 
 
 ## Services
 
-### eureka-server
+~~### eureka-server~~ (replaced with kubernetes discovery service. But you can still find it in *with_netflix_eureka_discovery branch.*)
 - A discovery service which tracks existing microservices and their instances.
 
 ### gateway
@@ -54,7 +54,9 @@ Library modules which have been used by different microservices.
 ### util
 - It holds exception models/handlers and service utility methods.
 
-## Tool Installation
+## Setup
+
+### Tool Installation
 
 - **Git:** Can be downloaded and installed from [git-scm](https://git-scm.com/downloads).
 - **Java11:** Can be downloaded and installed from [Zulu OpenJDK](https://www.azul.com/downloads/zulu-community/?version=java-11-lts&package=jdk).
@@ -65,6 +67,158 @@ Library modules which have been used by different microservices.
 - **kubectl**: Kubernetes command-line tool. - [kubectl-download](https://kubernetes.io/docs/tasks/tools/).
 - **VirtualBox**: x86 and AMD64/Intel64 virtualization product. - [virtualbox-download](https://www.virtualbox.org/wiki/Downloads).
 - **siege** - HTTP based load/traffic testing and benchmarking tool. - [siege-download](https://github.com/JoeDog/siege)
+
+### Create Local Kubernetes Cluster
+
+#### Development Environment
+- Unset KUBECONFIG environment variable to ensure that kubectl context is created in the default config file, ~.kube/config.
+```bash
+unset KUBECONFIG
+```
+
+- Create your local cluster with "acme-microservice-template" name.
+```bash
+minikube start -p acme-microservice-template --memory=5000 --cpus=2 --disk-size=20g --kubernetes-version=v1.21.1 --vm-driver=virtualbox
+```
+
+- Set current profile to "acme-microservice-template".
+```bash
+minikube profile acme-microservice-template
+```
+
+- Direct the local Docker client to communicate with Docker Engine in Minikube.
+```bash
+eval $(minikube docker-env)
+```
+
+- Build and create microservices' images which are specified in docker-compose.yml.
+```bash
+./gradlew build && docker-compose build
+```
+
+- Create a namespace and make it default namespace for kubectl.
+```bash
+kubectl create namespace hands-on
+kubectl config set-context $(kubectl config current-context) --namespace=hands-on
+```
+
+- Create the config-map for the configuration repository based on the files in config-repo.
+```bash
+kubectl create configmap config-repo --from-file=config-repo/ --save-config
+```
+
+- Create the secret for the configuration server.
+```bash
+kubectl create secret generic config-server-secrets --from-literal=ENCRYPT_KEY=my-very-secure-encrypt-key --from-literal=SPRING_SECURITY_USER_NAME=dev-usr --from-literal=SPRING_SECURITY_USER_PASSWORD=dev-pwd --save-config
+```
+
+- Create the secret for the clients of the configuration server.
+```bash
+kubectl create secret generic config-client-credentials --from-literal=CONFIG_SERVER_USR=dev-usr --from-literal=CONFIG_SERVER_PWD=dev-pwd --save-config
+```
+
+- Deploy the microservices for development environment.
+```bash
+kubectl apply -k kubernetes/services/overlays/dev
+```
+
+- Wait for the deployments and their pods to be up and running.
+```bash
+kubectl wait --timeout=600s --for=condition=ready pod --all
+```
+
+- List Docker images that are used for development.
+```bash
+kubectl get pods -o pods | jq .items[].spec.containers[].image
+```
+
+#### Staging/Production Environment
+- To simulate production-grade resource managers, MySQL, MongoDB and RabbitMQ will run outside of Kubernetes cluster.
+```bash
+eval $(minikube docker-env)
+docker-compose up -d mongodb mysql rabbitmq
+```
+
+- Tag existing Docker images with v1.
+```bash
+docker tag hands-on/auth-server hands-on/auth-server:v1
+docker tag hands-on/config-server hands-on/config-server:v1
+docker tag hands-on/gateway hands-on/gateway:v1
+docker tag hands-on/product-composite-service hands-on/product-composite-service:v1
+docker tag hands-on/product-service hands-on/product-service:v1
+docker tag hands-on/recommendation-service hands-on/recommendation-service:v1
+docker tag hands-on/review-service hands-on/review-service:v1
+```
+
+- Create a namespace and make it default namespace for kubectl.
+```bash
+kubectl create namespace hands-on
+kubectl config set-context $(kubectl config current-context) --namespace=hands-on
+```
+
+- Create the config-map for the configuration repository based on the files in config-repo.
+```bash
+kubectl create configmap config-repo --from-file=config-repo/ --save-config
+```
+
+- Create the secret for the configuration server with production credentials.
+```bash
+kubectl create secret generic config-server-secrets --from-literal=ENCRYPT_KEY=my-very-secure-encrypt-key --from-literal=SPRING_SECURITY_USER_NAME=prod-usr --from-literal=SPRING_SECURITY_USER_PASSWORD=prod-pwd --save-config
+```
+
+- Create the secret for the clients of the configuration server production credentials.
+```bash
+kubectl create secret generic config-client-credentials --from-literal=CONFIG_SERVER_USR=prod-usr --from-literal=CONFIG_SERVER_PWD=prod-pwd --save-config
+```
+
+- Deploy the microservices for production environment.
+```bash
+kubectl apply -k kubernetes/services/overlays/prod
+```
+
+- Wait for the deployments and their pods to be up and running.
+```bash
+kubectl wait --timeout=600s --for=condition=ready pod --all
+```
+
+- List Docker images that are used for production.
+```bash
+kubectl get pods -o pods | jq .items[].spec.containers[].image
+```
+
+### Testing
+
+- Start the test-em-all.bash file which includes all features of the project.
+```bash
+HOST=$(minikube)
+PORT=31443
+./test-em-all.bash
+```
+
+- Start a simple load testing with siege to simulate one user submits one request per second on average.
+```bash
+siege https://$(minikube ip):31443/actuator/health -c1 -d1
+```
+
+### Cleaning up your environment
+
+- Delete the namespace.
+```bash
+kubectl delete namespace hands-on
+```
+
+- Shut down resource managers that run outside of Kubernetes.
+```bash
+eval $(minikube docker-env)
+docker-compose down
+```
+
+- Delete profile on virtualbox.
+```bash
+minikube delete --profile acme-microservice-template
+```
+
+
 
 ## If you have a lot of questions, check below !!!
 
