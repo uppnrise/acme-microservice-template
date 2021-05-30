@@ -4,7 +4,7 @@
 # acme-microservices-template
 
 ---
-This project is a skeleton code for microservice architecture pattern using Spring and Docker.
+This project is a template for microservices architecture pattern using Spring, Docker and Kubernetes. Inspired and referenced from Magnus Larsson's [Hands On Spring Boot And Spring Cloud](https://subscription.packtpub.com/book/web_development/9781789613476?uuid=bcce201d-2958-4a34-9d8f-c1f9b0af4f06).
 
 ## Services
 
@@ -56,14 +56,17 @@ Library modules which have been used by different microservices.
 
 ## Tool Installation
 
-- **Git:** Can be downloaded and installed from [git-scm](https://git-scm.com/downloads)
-- **Java11:** Can be downloaded and installed from [Zulu OpenJDK](https://www.azul.com/downloads/zulu-community/?version=java-11-lts&package=jdk)
-- **curl:** This command-line tool for testing HTTP-based APIs can be downloaded and installed from [curl-download](https://curl.se/download.html)
-- **jq:** This command-line JSON processor can be downloaded and installed from [jq-download](https://stedolan.github.io/jq/download/)
-- **Spring Boot CLI:** It can be downloaded from [spring-boot-cli](https://docs.spring.io/spring-boot/docs/current/reference/html/getting-started.html#getting-started-installing-the-cli)
+- **Git:** Can be downloaded and installed from [git-scm](https://git-scm.com/downloads).
+- **Java11:** Can be downloaded and installed from [Zulu OpenJDK](https://www.azul.com/downloads/zulu-community/?version=java-11-lts&package=jdk).
+- **curl:** This command-line tool for testing HTTP-based APIs can be downloaded and installed from [curl-download](https://curl.se/download.html).
+- **jq:** This command-line JSON processor can be downloaded and installed from [jq-download](https://stedolan.github.io/jq/download/).
+- **Spring Boot CLI:** It can be downloaded from [spring-boot-cli](https://docs.spring.io/spring-boot/docs/current/reference/html/getting-started.html#getting-started-installing-the-cli).
+- **Minikube**: Local kubernetes cluster creator. - [minikube-github-repo](https://github.com/kubernetes/minikube).
+- **kubectl**: Kubernetes command-line tool. - [kubectl-download](https://kubernetes.io/docs/tasks/tools/).
+- **VirtualBox**: x86 and AMD64/Intel64 virtualization product. - [virtualbox-download](https://www.virtualbox.org/wiki/Downloads).
+- **siege** - HTTP based load/traffic testing and benchmarking tool. - [siege-download](https://github.com/JoeDog/siege)
 
-
-## I have a lot of questions !!!
+## If you have a lot of questions, check below !!!
 
 #### 1. What is the purpose of the @SpringBootApplication annotation?
 * It enables component scanning, which looks for Spring components and configuration classes, in the package of the application class and all its sub-packages.
